@@ -1,0 +1,24 @@
+//Gateway
+cd api-gateway
+npm install
+node gateway.js
+
+//Node-service
+cd node_service
+npm install
+node server.js
+
+//python-service
+cd python_service
+pip install -r requirements.txt 
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+//frontend
+npm install express http-proxy-middleware cors dotenv -g live-server
+cd frontend
+live-server
+
+//Ingesta desde la API de RAWG
+cd node_service
+node scripts/importRawg.js
+

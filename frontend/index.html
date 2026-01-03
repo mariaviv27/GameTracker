@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>GameTracker - Juegos Globales</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+        <div>
+            <button id="user-btn" class="btn btn-info me-2">Mi Perfil</button>
+        </div>
+        <h1>GameTracker</h1>
+        <button id="logout-btn" class="btn btn-danger">Cerrar sesión</button>
+    </header>
+
+    <main class="container mt-4">
+        <h2>Juegos Globales</h2>
+
+        <!-- Filtros -->
+        <div class="mb-3 d-flex gap-2">
+            <input type="text" id="search" placeholder="Buscar por título" class="form-control">
+            <select id="filter-genre" class="form-select">
+                <option value="">Todos los géneros</option>
+                <option value="Adventure">Adventure</option>
+                <option value="RPG">RPG</option>
+                <option value="Action">Action</option>
+                <option value="Strategy">Strategy</option>
+            </select>
+            <select id="filter-platform" class="form-select">
+                <option value="">Todas las plataformas</option>
+                <option value="PC">PC</option>
+                <option value="Nintendo Switch">Nintendo Switch</option>
+                <option value="PlayStation">PlayStation</option>
+                <option value="Xbox">Xbox</option>
+            </select>
+        </div>
+
+        <div id="games-list" class="row"></div>
+
+        <h3 class="mt-4">Añadir nuevo juego</h3>
+        <form id="add-game-form" class="mb-4">
+            <input type="text" id="title" placeholder="Título" class="form-control mb-2" required>
+            <input type="text" id="cover" placeholder="URL portada" class="form-control mb-2">
+            <textarea id="description" placeholder="Descripción" class="form-control mb-2"></textarea>
+
+            <div class="mb-2">
+                <strong>Plataformas:</strong><br>
+                <label><input type="checkbox" name="platforms" value="PC"> PC</label>
+                <label><input type="checkbox" name="platforms" value="Nintendo Switch"> Nintendo Switch</label>
+                <label><input type="checkbox" name="platforms" value="PlayStation"> PlayStation</label>
+                <label><input type="checkbox" name="platforms" value="Xbox"> Xbox</label>
+            </div>
+
+            <div class="mb-2">
+                <strong>Géneros:</strong><br>
+                <label><input type="checkbox" name="genres" value="Adventure"> Adventure</label>
+                <label><input type="checkbox" name="genres" value="RPG"> RPG</label>
+                <label><input type="checkbox" name="genres" value="Action"> Action</label>
+                <label><input type="checkbox" name="genres" value="Strategy"> Strategy</label>
+            </div>
+
+            <input
+              type="date"
+              id="releaseDate"
+              class="form-control mb-2"
+              required
+            >
+
+            <button type="submit" class="btn btn-primary">Añadir Juego</button>
+        </form>
+    </main>
+
+    <!-- Modal para editar juego -->
+    <div class="modal fade" id="editGameModal" tabindex="-1" aria-labelledby="editGameModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editGameModalLabel">Editar Juego</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="edit-game-id">
+            <div class="mb-2">
+              <label for="edit-title" class="form-label">Título</label>
+              <input type="text" id="edit-title" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label for="edit-description" class="form-label">Descripción</label>
+              <textarea id="edit-description" class="form-control"></textarea>
+            </div>
+            <div class="mb-2">
+              <strong>Plataformas:</strong><br>
+              <label><input type="checkbox" name="edit-platforms" value="PC"> PC</label>
+              <label><input type="checkbox" name="edit-platforms" value="Nintendo Switch"> Nintendo Switch</label>
+              <label><input type="checkbox" name="edit-platforms" value="PlayStation"> PlayStation</label>
+              <label><input type="checkbox" name="edit-platforms" value="Xbox"> Xbox</label>
+            </div>
+            <div class="mb-2">
+              <strong>Géneros:</strong><br>
+              <label><input type="checkbox" name="edit-genres" value="Adventure"> Adventure</label>
+              <label><input type="checkbox" name="edit-genres" value="RPG"> RPG</label>
+              <label><input type="checkbox" name="edit-genres" value="Action"> Action</label>
+              <label><input type="checkbox" name="edit-genres" value="Strategy"> Strategy</label>
+            </div>
+            <div class="mb-2">
+              <label for="edit-releaseDate" class="form-label">Fecha de lanzamiento</label>
+              <input type="date" id="edit-releaseDate" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label for="edit-cover" class="form-label">URL portada</label>
+              <input type="text" id="edit-cover" class="form-control">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="save-edit-btn">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal añadir juego a usuario -->
+    <div class="modal fade" id="addUserGameModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Añadir a mi lista</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="add-user-game-id">
+
+            <div class="mb-2">
+              <label class="form-label">Horas jugadas</label>
+              <input type="number" id="user-hours" class="form-control" min="0">
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Puntuación (0–10)</label>
+              <input type="number" id="user-rating" class="form-control" min="0" max="10">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-success" id="confirm-add-user-game">Añadir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

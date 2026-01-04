@@ -16,13 +16,20 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
 
     isAdmin: { 
         type: Boolean,
         default: false
+    },
+
+    githubId: {
+      type: String,
+      unique: true,
+      sparse: true
     }
+
   },
   { timestamps: true }
 );

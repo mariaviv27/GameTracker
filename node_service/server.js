@@ -4,10 +4,16 @@ const cors = require("cors");
 
 const connectDB = require("./config/db");
 
+const passport = require("passport");
+
 dotenv.config();
 connectDB();
 
 const app = express();
+
+// Configurar Passport
+require("./config/passport");
+app.use(passport.initialize());
 
 // Middlewares
 app.use(cors());

@@ -18,7 +18,24 @@ npm install express http-proxy-middleware cors dotenv -g live-server
 cd frontend
 live-server
 
+npm install -g http-server
+
 //Ingesta desde la API de RAWG
 cd node_service
 node scripts/importRawg.js
 
+//Gateway
+cd api-gateway
+node gateway.js
+
+//Node-service
+cd node_service
+node server.js
+
+//python-service
+cd python_service
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+//frontend
+cd frontend
+live-server
